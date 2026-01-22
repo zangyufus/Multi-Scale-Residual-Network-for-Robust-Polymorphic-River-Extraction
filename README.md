@@ -7,6 +7,13 @@
 
 The complete GPMRD will be uploaded soon.
 
+# Examples of result.
+
+<img width="1569" height="1006" alt="image" src="https://github.com/user-attachments/assets/ec35971b-c692-4cf0-a558-4799a3eef6ac" />
+
+<img width="1566" height="1013" alt="image" src="https://github.com/user-attachments/assets/e28cddb6-4eef-4483-9c2d-bf4ca09a1f3d" />
+
+
 # Test procedure record
 
 
