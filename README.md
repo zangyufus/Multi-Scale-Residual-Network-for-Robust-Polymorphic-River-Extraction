@@ -12,3 +12,60 @@ The complete GPMRD will be uploaded soon.
 
 https://github.com/user-attachments/assets/1e60c376-e5a3-4442-9e15-e7d15aab094d
 
+# The structure of dataset column
+
+|- train
+
+    |- images
+  
+      |- 1.tif
+    
+      |- 2.tif
+    
+      |- ...
+    
+    |- masks
+    
+      |- 1.tif
+      
+      |- 2.tif
+      
+      |- ...
+      
+|- valid
+
+    |- images
+    
+      |- 3.tif
+      
+      |- 4.tif
+      
+      |- ...
+      
+    |- masks
+    
+      |- 3.tif
+      
+      |- 4.tif
+      
+      |- ...
+    
+|- test
+
+    |- images
+    
+      |- 5.tif
+      
+      |- 6.tif
+      
+      |- ...
+      
+    |- masks
+    
+      |- 5.tif
+      
+      |- 6.tif
+      
+      |- ...
+
+
