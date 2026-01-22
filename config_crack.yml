@@ -1,0 +1,16 @@
+## Config file
+lr:                     1e-4
+epochs:                 100
+number_classes:         1
+batch_size_tr:          2
+batch_size_va:          1
+saved_model:            './checkpoints/weights_test.model'
+saved_model_final:      './checkpoints/weights.model'
+path_to_tradata:        'E:/river extraction/dataset/test'
+path_to_testdata:       'C:/Users/HP/Desktop/dataset/test' 
+path_to_valdata:        'E:/river extraction/dataset/valid' 
+patience:               6
+progress_p:             0.5 
+pretrained:             1
+loss_filename:         'loss_log.txt'
+save_result:           'C:/Users/HP/Desktop/dataset/test/result'

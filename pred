@@ -1,0 +1,127 @@
+import time
+import argparse
+import codecs
+import yaml
+from tqdm import tqdm
+from newloader import *
+from pathlib import Path
+from matplotlib import pyplot as plt
+from PIL import Image
+from torch.utils.data import DataLoader
+from model.Net import Net
+from utils.utils import get_img_patches, merge_pred_patches
+from pathlib import Path
+import torch
+import cv2
+import numpy as np
+import os
+
+# 解析命令行参数
+parser = argparse.ArgumentParser()
+parser.add_argument('--output', type=str)
+parser.add_argument('--thresh_step', type=float, default=0.01)
+args = parser.parse_args()
+
+config = yaml.load(open('./config_crack.yml'), Loader=yaml.FullLoader)
+batch_size_va = int(config['batch_size_va']) 
+
+
+def save_results(input_list, output_path):
+    with codecs.open(output_path, 'w', encoding='utf-8') as fout:
+        for ll in input_list:
+            line = '\t'.join(['%.4f'%v for v in ll])+'\n'
+            fout.write(line)
+
+def save_sample(img_path, msk, msk_pred, fname, name=''):
+
+    with rasterio.open(img_path) as src:
+        img_array = src.read() 
+    
+    img_height, img_width = img_array.shape[1], img_array.shape[2]
+
+    if img_array.shape[0] >= 3:
+        img_rgb = img_array[:3, :, :] 
+        img_rgb = np.moveaxis(img_rgb, 0, -1) 
+        img_rgb = cv2.cvtColor(img_rgb, cv2.COLOR_BGR2RGB)  # OpenCV 使用 BGR，转换为 RGB
+    else:
+        print(f"Warning: The image at {img_path} does not have enough channels for RGB.")
+        return
+
+    # img_rgb = linear_stretch(img_rgb)
+
+    msk = msk.astype(int)
+    mskp = msk_pred.astype(np.float32)
+
+    if msk.shape != (img_height, img_width):
+        msk = cv2.resize(msk, (img_width, img_height), interpolation=cv2.INTER_NEAREST)
+
+    if mskp.shape != (img_height, img_width):
+        mskp = cv2.resize(mskp, (img_width, img_height), interpolation=cv2.INTER_LINEAR)
+
+    # 保存预测 mask 结果
+    fname = fname[0]
+    fname_without = os.path.splitext(fname)[0]  
+    mask_pred_path = os.path.join(config['save_result'], f"{fname_without}.png")
+    cv2.imwrite(mask_pred_path, mskp * 255)
+    print(f"Prediction mask saved at {mask_pred_path}")
+
+
+# 读取配置
+device = 'cuda' if torch.cuda.is_available() else 'cpu'
+data_path = config['path_to_testdata']
+DIR_IMG  = os.path.join(data_path, 'images')
+DIR_MASK = os.path.join(data_path, 'masks')
+img_names  = [path.name for path in Path(DIR_IMG).glob('*.tif')]
+mask_names = [path.name for path in Path(DIR_MASK).glob('*.tif')]
+total_test_samples = len(list(Path(config['path_to_testdata']).glob('images/*.tif')))
+print(f"total_test_samples: {total_test_samples}")
+
+test_dataset = TifDataset(img_dir=DIR_IMG, img_fnames=img_names, mask_dir=DIR_MASK, mask_fnames=mask_names, isTrain=False)
+test_loader = DataLoader(test_dataset, batch_size=batch_size_va, shuffle=False, drop_last=True)
+print(f'test_dataset:{len(test_dataset)}')
+
+# 加载模型
+Net = Net(n_classes=int(config['number_classes']))
+Net = Net.to(device)
+Net.load_state_dict(torch.load(config['saved_model'], map_location='cpu')['model_weights'])
+
+save_samples = True  # 是否保存样本
+
+with torch.no_grad():
+    print('val_mode')
+    val_loss = 0
+    times = 0
+    Net.eval()
+
+    for itter, batch in enumerate(tqdm(test_loader)):
+        img = batch['image'].to(device, dtype=torch.float)
+        img_path = batch['img_path'][0]
+        fname = batch['fname']
+        msk = batch['mask']
+        
+        patch_totensor = TifToTensor()
+        preds = []
+        
+        start = time.time()
+        
+        for i in range(img.size(0)): 
+            img_single = img[i].cpu().numpy()
+            img_single = np.transpose(img_single, (1, 2, 0)) 
+            patches, patch_locs = get_img_patches(img_single)
+            for patch in patches:
+                #patch_n = patch_totensor(Image.fromarray(patch))  # 将patch转换为tensor
+                patch_n = torch.tensor(patch.transpose(2, 0, 1), dtype=torch.float32)
+                X = patch_n.unsqueeze(0).to(device, dtype=torch.float) 
+                msk_pred = torch.sigmoid(Net(X))
+                mask = msk_pred.cpu().detach().numpy()[0, 0]
+                preds.append(mask)
+
+        mskp = merge_pred_patches(img_single, preds, patch_locs) 
+
+        if itter < total_test_samples and save_samples:
+            save_sample(img_path, msk.numpy()[0, 0], mskp, fname, name=str(itter + 1))
+
+
+        
+        end = time.time()
+        times += (end - start)
