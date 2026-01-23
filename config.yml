@@ -14,3 +14,4 @@ progress_p:             0.5
 pretrained:             1
 loss_filename:         'loss_log.txt'
 save_result:           'C:/Users/HP/Desktop/dataset/test/result'
+
