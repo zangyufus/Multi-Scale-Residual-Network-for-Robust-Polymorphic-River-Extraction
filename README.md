@@ -7,6 +7,78 @@
 
 The complete GPMRD will be uploaded soon.
 
+# Usage 
+
+The structure of dataset
+    
+    |- train
+    
+        |- images
+      
+          |- 1.tif
+        
+          |- 2.tif
+        
+          |- ...
+        
+        |- masks
+        
+          |- 1.tif
+          
+          |- 2.tif
+          
+          |- ...
+          
+    |- valid
+    
+        |- images
+        
+          |- 3.tif
+          
+          |- 4.tif
+          
+          |- ...
+          
+        |- masks
+        
+          |- 3.tif
+          
+          |- 4.tif
+          
+          |- ...
+        
+    |- test
+    
+        |- images
+        
+          |- 5.tif
+          
+          |- 6.tif
+          
+          |- ...
+          
+        |- masks
+        
+          |- 5.tif
+          
+          |- 6.tif
+          
+          |- ...
+
+
+Create conda environment
+
+    conda env create -f net.yml
+
+Training
+
+    python train.py --config config.yml
+
+Test
+
+    python evaluate.py --config config.yml
+
+
 # Examples of result.
 
 <img width="1569" height="1006" alt="image" src="https://github.com/user-attachments/assets/ec35971b-c692-4cf0-a558-4799a3eef6ac" />
@@ -18,61 +90,4 @@ The complete GPMRD will be uploaded soon.
 
 
 https://github.com/user-attachments/assets/1e60c376-e5a3-4442-9e15-e7d15aab094d
-
-# The structure of dataset column
-
-|- train
-
-    |- images
-  
-      |- 1.tif
-    
-      |- 2.tif
-    
-      |- ...
-    
-    |- masks
-    
-      |- 1.tif
-      
-      |- 2.tif
-      
-      |- ...
-      
-|- valid
-
-    |- images
-    
-      |- 3.tif
-      
-      |- 4.tif
-      
-      |- ...
-      
-    |- masks
-    
-      |- 3.tif
-      
-      |- 4.tif
-      
-      |- ...
-    
-|- test
-
-    |- images
-    
-      |- 5.tif
-      
-      |- 6.tif
-      
-      |- ...
-      
-    |- masks
-    
-      |- 5.tif
-      
-      |- 6.tif
-      
-      |- ...
-
 
