@@ -24,7 +24,7 @@ parser.add_argument('--output', type=str, default='./results.prf')
 parser.add_argument('--thresh_step', type=float, default=0.01)
 args = parser.parse_args()
 
-config = yaml.load(open('./config_crack.yml'), Loader=yaml.FullLoader)
+config = yaml.load(open('./config.yml'), Loader=yaml.FullLoader)
 batch_size_va = int(config['batch_size_va']) 
 
 
@@ -233,3 +233,4 @@ with torch.no_grad():
     print(f"Overall F1 Score: {avg_f1_score:.4f}")
 
     print(f'Running time of each image: {times/total_test_samples:.4f}s')
+
