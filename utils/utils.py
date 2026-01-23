@@ -9,7 +9,7 @@ import torch.nn.functional as F
 import numpy as np
 from utils.loss import TverskyFocalLoss, TverskyBCELoss, DiceFocalLoss, TverskyDiceLoss, ExpLogDiceLoss
 
-config = yaml.load(open('./config_crack.yml'), Loader=yaml.FullLoader)
+config = yaml.load(open('./config.yml'), Loader=yaml.FullLoader)
 
 def setup_seed(seed):
     torch.manual_seed(seed)
@@ -160,4 +160,5 @@ class DiceBCELoss(nn.Module):
         BCE = F.binary_cross_entropy(inputs, targets, reduction='mean', weight=weight)
         Dice_BCE = BCE + dice_loss
         
+
         return Dice_BCE
