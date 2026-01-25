@@ -95,3 +95,7 @@ Test
 
 https://github.com/user-attachments/assets/1e60c376-e5a3-4442-9e15-e7d15aab094d
 
+# Acknowledgement
+
+The code is developed on the top of MSResNet, we thank to their efficient and neat codebase.
+
