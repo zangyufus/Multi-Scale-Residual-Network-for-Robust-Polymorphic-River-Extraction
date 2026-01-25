@@ -1,4 +1,4 @@
-# Multi-Scale-Residual-Network-for-Robust-Polymorphic-River-Extraction
+# SSH-Net: Robust Polymorphic River Extraction from Sentinel-2 Imagery
 # Overview of the network structure
 <img width="882" height="502" alt="image" src="https://github.com/user-attachments/assets/1375b5a1-3d91-4d67-aa27-518898503ede" />
 
