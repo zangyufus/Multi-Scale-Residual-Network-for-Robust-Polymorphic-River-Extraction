@@ -1,4 +1,8 @@
 # SSH-Net: Robust Polymorphic River Extraction from Sentinel-2 Imagery
+
+# Abstract
+<img width="1937" height="575" alt="image" src="https://github.com/user-attachments/assets/9dd490f0-7dc2-423e-b5f7-d13f40b00230" />
+
 # Overview of the network structure
 <img width="882" height="502" alt="image" src="https://github.com/user-attachments/assets/1375b5a1-3d91-4d67-aa27-518898503ede" />
 
